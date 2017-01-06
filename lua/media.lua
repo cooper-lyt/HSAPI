@@ -46,7 +46,7 @@ function req_orig_file(file_url)
             else
                 ngx.say(body)
                 ngx.flush(true)
-		exit_with_code(200)
+		        exit_with_code(200)
                 return
             end
         end
