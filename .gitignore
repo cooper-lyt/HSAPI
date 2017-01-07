@@ -42,3 +42,11 @@ luac.out
 # Mac files
 .DS_Store
 
+# Vanilla
+client_body_temp
+fastcgi_temp
+logs
+proxy_temp
+tmp
+uwsgi_temp
+
