@@ -20,21 +20,15 @@ function weedfs:delete(del_fid)
 end
 
 function weedfs:assing()
-    local hc = http:new()
-    local ok, code, headers, status, body = hc:request{
-        url = ngx.var.weed_img_root_url .. "dir/assign",
-        timeout = 3000,
-    }  
-    return code , body
+    local hc = http.new()
+    local res,err = hc:request_uri(ngx.var.weed_img_root_url .. "dir/assign")
+    return res.status , res.body
 end
 
 function weedfs:lookup(volume_id)
-    local hc = http:new()
-    local ok, code, headers, status, body = hc:request{
-        url = ngx.var.weed_img_root_url .. "dir/lookup?volumeId="..volume_id,
-        timeout = 3000,
-    }  
-    return code , body
+    local hc = http.new()
+    local res,err = hc:request_uri(ngx.var.weed_img_root_url .. "dir/lookup?volumeId="..volume_id)
+    return res.status , res.body
 end
 
 function weedfs:upload()

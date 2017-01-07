@@ -21,30 +21,24 @@ end
 
 function req_orig_file(file_url)
     local http = require"resty.http"
-    local hc = http:new()
-    local ok, code, headers, status, body = hc:request{
-        url = file_url,
-        timeout = 3000,
-    }
+    local hc = http.new()
+    local res, err = hc:request_uri(file_url)
 
-    if code == 301 or code == 302 then
-       file_url = string.match(body,'"(.+)"')
-       ok, code, headers, status, body = hc:request{
-        url = file_url,
-        timeout = 3000,
-       }
+    if res.status == 301 or res.status == 302 then
+       file_url = string.match(res.body,'"(.+)"')
+       res, err = hc:request_uri(file_url)
     end
 
-    if code ~= 200 then
+    if res.status ~= 200 then
        return exit_with_code(404)
     else
-        if body == nil then
+        if res.body == nil then
             return exit_with_code(404)
         else
-            if (body..'a') == 'a' then
+            if (res.body..'a') == 'a' then
                 return exit_with_code(404)
             else
-                ngx.say(body)
+                ngx.say(res.body)
                 ngx.flush(true)
 		        exit_with_code(200)
                 return
@@ -56,35 +50,28 @@ end
 
 function save_orig_file(file_url,local_file_folder,local_file_path)
     local http = require"resty.http"
-    local hc = http:new()
-    local ok, code, headers, status, body = hc:request{
-        url = file_url,
-        timeout = 3000,
-    }
+    local hc = http.new()
+    local res, err = hc:request_uri(file_url)
 
-
-    if code == 301 or code == 302 then
-       file_url = string.match(body,'"(.+)"')
-       ok, code, headers, status, body = hc:request{
-        url = file_url,
-        timeout = 3000,
-      } 
+    if res.status == 301 or res.status == 302 then
+       file_url = string.match(res.body,'"(.+)"')
+       res, err = hc:request_uri(file_url)
     end
 
-    if code ~= 200 then
+    if res.status ~= 200 then
         return exit_with_code(404)
     else
-        if body == nil then
+        if res.body == nil then
             return exit_with_code(404)
         else
-            if (body..'a') == 'a' then
+            if (res.body..'a') == 'a' then
                 return exit_with_code(404)
             else
                 local mkdir_command ="mkdir -p "..local_file_folder.." >/dev/null 2>&1 "
                 os.execute(mkdir_command)
                 file = io.open(local_file_path, "w");
                 if (file) then
-                    file:write(body);
+                    file:write(res.body);
                     file:close();
                 else
                     return exit_with_code(500)
