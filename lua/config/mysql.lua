@@ -12,10 +12,10 @@ return {
     USER = "root",
 
     --- 密码
-    PASSWORD = "isNull",
+    PASSWORD = "5257mq",
 
     --- 数据库
-    DATABASE = "WEI_PLAT",
+    DATABASE = "HOUSE_INFO",
 
     --- 连接超时
     TIMEOUT = 10000,

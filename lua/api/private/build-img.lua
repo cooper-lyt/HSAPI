@@ -9,8 +9,6 @@ local build_id = arg.id
 
 if not build_id then
 	local sql = "select ID from BUILD where MAP_NUMBER = %s and BLOCK_NO = %s and BUILD_NO = %s"
-
-
 	local res = mysql:query(sqlutil:format(ndk.set_var.set_quote_sql_str(arg.m),ndk.set_var.set_quote_sql_str(arg.bl),ndk.set_var.set_quote_sql_str(arg.b) ))
 	mysql:closeClient()
 	if table.getn(res) == 0 then
